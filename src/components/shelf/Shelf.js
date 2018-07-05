@@ -5,6 +5,10 @@ import { connect }	from "react-redux";
 import { fetchProducts } from "../../store/actions/productActions";
 import { addProduct } from "../../store/actions/floatCartActions";
 
+import Filter from "./Filter";
+import ShelfHeader from "./ShelfHeader";
+import Clearfix from "../Clearfix";
+
 class Shelf extends Component {
 	
 	componentWillMount() {
@@ -12,12 +16,26 @@ class Shelf extends Component {
 	}
 
 	render() {
+		const { products } = this.props;
+
+		const p = products.map(p => {
+			return (
+				<Product
+					product={p}
+					addProduct={this.props.addProduct}
+					key={p.id} />
+			);
+		});
+		
 		return (
 			<React.Fragment>
 				<Filter />
 				<div className="shelf-container">
-					<ShelfHeader 
+					<ShelfHeader productsLength={products.length} />
+					{p}
+					<Clearfix />
 				</div>
+				<Clearfix />
 			</React.Fragment>
 		);
 	}
@@ -35,6 +53,6 @@ const mapStateToProps = state => ({
 	products: state.products.items,
 	filters: state.filters.items,
 	sort: state.sort.item
-})
+});
 
 export default connect(mapStateToProps, { fetchProducts, addProduct })(Shelf);
