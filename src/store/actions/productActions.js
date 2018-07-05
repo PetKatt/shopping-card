@@ -5,16 +5,16 @@ const productsAPI = "";
 
 const compare = {
 	"descending": (a, b) => {
-		if(a.price < b.price)
+		if (a.price < b.price)
 			return -1;
-		if(a.price > b.price)
+		if (a.price > b.price)
 			return 1;
 		return 0;
 	},
 	"ascending": (a, b) => {
-		if(a.price > b.price)
+		if (a.price > b.price)
 			return -1;
-		if(a.price < b.price)
+		if (a.price < b.price)
 			return 1;
 		return 0;
 	}
@@ -26,14 +26,14 @@ export const fetchProducts = (filters, sortBy) => dispatch => {
 		.then(res => {
 			let { products } = res.data;
 
-			if(!!filters && filters.length > 0){
+			if (!!filters && filters.length > 0) {
 				products = products.filter(
 					p => filters.find(
 						f => p.availableSizes.find(
 							size => size === f)));
 			}
 
-			if(!!sortBy){
+			if (!!sortBy) {
 				products = products.sort(compare[sortBy]);
 			}
 
