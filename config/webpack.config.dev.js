@@ -164,6 +164,8 @@ module.exports = {
                 loader: require.resolve('css-loader'),
                 options: {
                   importLoaders: 1,
+                  modules: true,
+                  localIdentName: '[name]__[local]--[hash:base64:5]'
                 },
               },
               {
@@ -188,11 +190,19 @@ module.exports = {
               },
             ],
           },
+          //Loader for .scss files
           {
             test: /\.scss$/,
-            loaders: [
+            use: [
               require.resolve("style-loader"),
-              require.resolve("css-loader"),
+              { 
+                loader: require.resolve("css-loader"),
+                options: {
+                  importLoaders: 1,
+                  modules: true,
+                  localIdentName: '[name]__[local]--[hash:base64:5]' 
+                }
+              },
               require.resolve("sass-loader")
             ]
           },

@@ -20,7 +20,19 @@ const availableSizes = [
 
 class Filter extends Component {
 
-	toggleCheckbox = (label) => 
+	componentWillMount() {
+		this.selectedCheckboxes = new Set();
+	}
+
+	toggleCheckbox = (label) => {
+		if (this.selectedCheckboxes.has(label)) {
+			this.selectedCheckboxes.delete(label);
+		} else {
+			this.selectedCheckboxes.add(label);
+		}
+
+		this.props.updateFilters(Array.from(this.selectedCheckboxes));
+	}
 
 	createCheckbox = (label) => (
 		<Checkbox
@@ -45,3 +57,14 @@ class Filter extends Component {
 		);
 	}
 }
+
+Filter.propTypes = {
+	updateFilters: PropTypes.func.isRequired,
+	filters: PropTypes.array
+}
+
+const mapStateToProps = state => ({
+	filters: state.filters.items
+})
+
+export default connect(mapStateToProps, { updateFilters })(Filter);
