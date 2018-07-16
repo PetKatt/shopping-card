@@ -9,7 +9,7 @@ import util from "../../util";
 const Product = (props) => {
 	const { product } = props.product;	
 
-	// An input component can change the quantity in the future
+	// A component can change the quantity in the future
 	product.quantity = 1;
 
 	let formattedPrice = util.formatPrice(product.price, product.currencyId);
