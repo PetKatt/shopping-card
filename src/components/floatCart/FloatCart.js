@@ -152,9 +152,14 @@ class FloatCart extends Component {
 							</p>
 							<small className="sub-price__installment">
 								{!!cartTotals.installments && (
-									
+									<span>
+										{`OR UP TO ${cartTotals.installments} x ${cartTotals.currencyFormat} ${util.formatPrice(cartTotals.totalPrice / cartTotals.installments, cartTotals.currencyId)}`}
+									</span>
 								)}
 							</small>
+						</div>
+						<div onClick={() => this.proceedToCheckout()} className="buy-btn">
+							Checkout!
 						</div>
 					</div>
 				</div>
