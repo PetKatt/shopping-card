@@ -19,12 +19,146 @@ class FloatCart extends Component {
 	};
 
 	componentWillMount() {
+		this.props.loadCart(JSON.parse(persistentCart().get()) || []);
+	}
 
+	componentDidMount() {
+		setTimeout(() => {
+			this.props.updateCart(this.props.cartProducts);
+		}, 0);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if(nextProps.newProduct !== this.props.newProduct) {
+			this.addProduct(nextProps.newProduct);
+		}
+
+		if(nextProps.productToRemove !== this.props.productToRemove) {
+			this.removeProduct(nextProps.productToRemove);
+		}
+	}
+
+	openFloatCart = () => {
+		this.setState({ isOpen: true });
+	}
+
+	closeFloatCart = () => {
+		this.setState({ isOpen: false });
+	}
+
+	addProduct = (product) => {
+		const { cartProducts, updateCart } = this.props;
+		let productAlreadyInCart = false;
+
+		cartProducts.forEach(cp => {
+			if(cp.id === product.id) {
+				cp.quantity += product.quantity;
+				productAlreadyInCart = true;
+			}
+		});
+
+		if(!productAlreadyInCart) {
+			cartProducts.push(product);
+		}
+
+		updateCart(cartProducts);
+		this.openFloatCart();
+	}
+
+	removeProduct = (product) => {
+		const { cartProducts, updateCart } = this.props;
+
+		const index = cartProducts.findIndex(p => p.id === product.id);
+		if(index >= 0) {
+			cartProducts.splice(index, 1);
+			updateCart(cartProducts);
+		}
+	}
+
+	proceedToCheckout = () => {
+		const { totalPrice, productQuantity, currencyFormat, currencyId } = this.props.cartTotals;
+
+		if(!productQuantity) {
+			alert("Add products to the shop basket!");
+		} else {
+			alert(`Checkout - Subtotal: ${currencyFormat} ${util.formatPrice(totalPrice, currencyId)}`);
+		}
 	}
 
 	render() {
+		const { cartTotals, cartProducts, removeProduct } = this.props;
+
+		const products = cartProducts.map(p => {
+			return (
+				<CartProduct
+					product={p}
+					removeProduct={removeProduct}
+					key={p.id}
+				/>
+			);
+		});
+
+		let classes = ["float-cart"];
+
+		if(!!this.state.isOpen) {
+			classes.push("float-cart--open");
+		}
+
 		return (
-			
+			<div className={classes.join(" ")}>
+				{/*If the basket is open, show the button for closing it*/}
+				{this.state.isOpen && (
+					<div
+						onClick={() => this.closeFloatCart()}
+						className="float-cart__close-btn"
+					>
+					X
+					</div>
+				)}
+
+				{/*If the basket is closed, show bag with quantity of all products and the button for opening floatCart*/}
+				{!this.state.isOpen && (
+					<span
+						onClick={() => this.openFloatCart()}
+						className="bag bag--float-cart-closed"
+					>
+						<span className="bag__quantity">{cartTotals.productQuantity}</span>
+					</span>	
+				)}
+
+				<div className="float-cart__content">
+					<div className="float-cart__header">
+						<span className="bag">
+							<span className="bag__quantity">
+								{cartTotals.productQuantity}
+							</span>
+						</span>
+						<span className="header-title">BASKET</span>
+					</div>
+
+					<div className="float-cart__shelf-container">
+						{products}
+						{!products.length && (
+							<p className="shelf-empty">Add some products to the basket! <br /> :)
+							</p>
+						)}
+					</div>
+
+					<div className="float-cart__footer">
+						<div className="sub">SUBTOTAL</div>
+						<div className="sub-price">
+							<p className="sub-price__val">
+								{`${cartTotals.currencyFormat} ${util.formatPrice(cartTotals.totalPrice, cartTotals.currencyId)}`}
+							</p>
+							<small className="sub-price__installment">
+								{!!cartTotals.installments && (
+									
+								)}
+							</small>
+						</div>
+					</div>
+				</div>
+			</div>	
 		);
 	}
 }
