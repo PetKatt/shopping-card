@@ -8,8 +8,8 @@ import { updateSort } from "../../store/actions/sortActions";
 import Selectbox from "../Selectbox";
 
 const sortBy = [
-	{ value: "", label: "Select" }
-	{ value: "low price", label: "Lowest Price" }
+	{ value: "", label: "Select" },
+	{ value: "low price", label: "Lowest Price" },
 	{ value: "high price", label: "Highest Price" }
 ];
 
