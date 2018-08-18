@@ -1,7 +1,7 @@
 import { FETCH_PRODUCTS } from "./types";
 import axios from "axios";
 
-const productsAPI = "";
+const productsAPI = "http://localhost:8001/api/products";
 
 const compare = {
 	"descending": (a, b) => {
