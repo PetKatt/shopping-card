@@ -17,7 +17,7 @@ class App extends Component {
     	<Provider store={store}>
 	      <div className="App">
 	        <Corner />
-	        <Banner src={bannerImage} alt="Plakat Sklepu" />
+	        <Banner src={bannerImage} alt="Shop Poster" />
 	        <main>
 	        	<Shelf />
 	        </main>

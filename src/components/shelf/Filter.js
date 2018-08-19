@@ -52,7 +52,7 @@ class Filter extends Component {
 			<div className="filters">
 				<h4 className="title">Sizes:</h4>
 				{this.createCheckboxes()}
-				<StarButton />
+				{/* <StarButton /> */}
 			</div>	
 		);
 	}
